@@ -2,7 +2,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import methodOverride from 'method-override';
 import CampgroundModel from './models/campground.mjs';
+
 
 const filename = fileURLToPath(import.meta.url);
 
@@ -26,6 +28,7 @@ app.set('view engine', 'ejs');
 app.set('views', join(dirname(filename), 'views'));
 
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 app.get('/', (req, res) => {
   res.render('home');
@@ -49,6 +52,17 @@ app.post('/campgrounds', async (req, res) => {
 app.get('/campgrounds/:id', async (req, res) => {
   const campground = await CampgroundModel.findById(req.params.id);
   res.render('campgrounds/show', { campground });
+});
+
+app.get('/campgrounds/:id/edit', async (req, res) => {
+  const campground = await CampgroundModel.findById(req.params.id);
+  res.render('campgrounds/edit', { campground });
+});
+
+app.put('/campgrounds/:id', async (req, res) => {
+  const { id } = req.params;
+  const campground = await CampgroundModel.findByIdAndUpdate(id, { ...req.body.campground });
+  res.redirect(`/campgrounds/${campground._id}`);
 });
 
 // app.get('/makecampground', async (req, res) => {
