@@ -25,6 +25,8 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', join(dirname(filename), 'views'));
 
+app.use(express.urlencoded({ extended: true }));
+
 app.get('/', (req, res) => {
   res.render('home');
 });
@@ -34,14 +36,29 @@ app.get('/campgrounds', async (req, res) => {
   res.render('campgrounds/index', { campgrounds });
 });
 
-app.get('/makecampground', async (req, res) => {
-  const camp = new CampgroundModel({
-    title: 'My Camp',
-    description: 'Amazing camping',
-  });
-  await camp.save();
-  res.send(camp);
+app.get('/campgrounds/new', (req, res) => {
+  res.render('campgrounds/new');
 });
+
+app.post('/campgrounds', async (req, res) => {
+  const campground = new CampgroundModel(req.body.campground);
+  await campground.save();
+  res.redirect(`/campgrounds/${campground._id}`);
+});
+
+app.get('/campgrounds/:id', async (req, res) => {
+  const campground = await CampgroundModel.findById(req.params.id);
+  res.render('campgrounds/show', { campground });
+});
+
+// app.get('/makecampground', async (req, res) => {
+//   const camp = new CampgroundModel({
+//     title: 'My Camp',
+//     description: 'Amazing camping',
+//   });
+//   await camp.save();
+//   res.send(camp);
+// });
 
 app.listen(3000, () => {
   console.log('Serving on port 3000');
