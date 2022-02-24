@@ -22,9 +22,10 @@ const seedDB = async () => {
       location: `${cities[randomThousand].city}, ${cities[randomThousand].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
     });
+    // eslint-disable-next-line no-await-in-loop
     await camp.save();
   }
-}
+};
 
 seedDB().then(() => {
   mongoose.connection.close();

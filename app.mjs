@@ -5,7 +5,6 @@ import { fileURLToPath } from 'url';
 import methodOverride from 'method-override';
 import CampgroundModel from './models/campground.mjs';
 
-
 const filename = fileURLToPath(import.meta.url);
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
