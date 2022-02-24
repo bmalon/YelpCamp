@@ -1,0 +1,33 @@
+{
+  "name": "yelpcamp",
+  "version": "1.0.0",
+  "description": "Add & review camping grounds.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmalon/YelpCamp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bmalon/YelpCamp/issues"
+  },
+  "homepage": "https://github.com/bmalon/YelpCamp#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.3",
+    "vue": "^3.2.31"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.2.31",
+    "eslint": "^8.9.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-vue": "^8.5.0"
+  }
+}
