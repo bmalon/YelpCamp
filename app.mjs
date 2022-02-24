@@ -29,6 +29,11 @@ app.get('/', (req, res) => {
   res.render('home');
 });
 
+app.get('/campgrounds', async (req, res) => {
+  const campgrounds = await CampgroundModel.find({});
+  res.render('campgrounds/index', { campgrounds });
+});
+
 app.get('/makecampground', async (req, res) => {
   const camp = new CampgroundModel({
     title: 'My Camp',
