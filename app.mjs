@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import morgan from 'morgan';
 import methodOverride from 'method-override';
 import CampgroundModel from './models/campground.mjs';
 
@@ -26,8 +27,10 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', join(dirname(filename), 'views'));
 
+// Middleware functions
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(morgan('common'));
 
 app.get('/', (req, res) => {
   res.render('home');
