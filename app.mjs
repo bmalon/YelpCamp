@@ -1,11 +1,13 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import ejsMate from 'ejs-mate';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
 import CampgroundModel from './models/campground.mjs';
 
+// const engine = require('ejs-mate');
 const filename = fileURLToPath(import.meta.url);
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
@@ -26,6 +28,8 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', join(dirname(filename), 'views'));
+
+app.engine('ejs', ejsMate);
 
 // Middleware functions
 app.use(express.urlencoded({ extended: true }));
