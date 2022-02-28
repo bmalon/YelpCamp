@@ -25,6 +25,8 @@
     "method-override": "^3.0.0",
     "mongoose": "^6.2.3",
     "morgan": "^1.10.0",
+    "node-fetch": "^3.2.0",
+    "unsplash-js": "^7.0.15",
     "vue": "^3.2.31"
   },
   "devDependencies": {
