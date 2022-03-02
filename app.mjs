@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
 import CampgroundModel from './models/campground.mjs';
+import ExpressError from './utils/ExpressError.mjs';
 import catchAsync from './utils/catchAsync.mjs';
 
 // const engine = require('ejs-mate');
@@ -51,6 +52,7 @@ app.get('/campgrounds/new', (req, res) => {
 });
 
 app.post('/campgrounds', catchAsync(async (req, res) => {
+  if (!req.body.campground) throw new ExpressError(400, 'Invalid Campground Data');
   const campground = new CampgroundModel(req.body.campground);
   await campground.save();
   res.redirect(`/campgrounds/${campground._id}`);
@@ -78,6 +80,10 @@ app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
   res.redirect('/campgrounds');
 }));
 
+app.all('*', (req, res, next) => {
+  next(new ExpressError(404, 'Page Not Found'));
+});
+
 // app.get('/makecampground', async (req, res) => {
 //   const camp = new CampgroundModel({
 //     title: 'My Camp',
@@ -89,7 +95,10 @@ app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
 
 // Error Handler
 app.use((err, req, res, next) => {
-  res.send('Something went WRONG');
+  const { statusCode = 500 } = err;
+  // eslint-disable-next-line no-param-reassign
+  if (!err.message) err.message = 'Something went wrong';
+  res.status(statusCode).render('error', { err });
 });
 
 app.listen(3000, () => {
