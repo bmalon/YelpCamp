@@ -5,6 +5,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
+import Joi from 'joi';
 import CampgroundModel from './models/campground.mjs';
 import ExpressError from './utils/ExpressError.mjs';
 import catchAsync from './utils/catchAsync.mjs';
@@ -52,7 +53,22 @@ app.get('/campgrounds/new', (req, res) => {
 });
 
 app.post('/campgrounds', catchAsync(async (req, res) => {
-  if (!req.body.campground) throw new ExpressError(400, 'Invalid Campground Data');
+  // if (!req.body.campground) throw new ExpressError(400, 'Invalid Campground Data');
+  const campgroundSchema = Joi.object({
+    campground: Joi.object({
+      title: Joi.string().required(),
+      price: Joi.number().required().min(0),
+      image: Joi.string().required(),
+      location: Joi.string().required(),
+      description: Joi.string().required(),
+    }).required(),
+  });
+  const { error } = campgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map(el => el.message).join(',');
+    throw new ExpressError(400, msg);
+  }
+  // console.log(result);
   const campground = new CampgroundModel(req.body.campground);
   await campground.save();
   res.redirect(`/campgrounds/${campground._id}`);
