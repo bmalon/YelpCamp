@@ -65,7 +65,7 @@ app.post('/campgrounds', catchAsync(async (req, res) => {
   });
   const { error } = campgroundSchema.validate(req.body);
   if (error) {
-    const msg = error.details.map(el => el.message).join(',');
+    const msg = error.details.map((el) => el.message).join(',');
     throw new ExpressError(400, msg);
   }
   // console.log(result);
@@ -110,6 +110,7 @@ app.all('*', (req, res, next) => {
 // });
 
 // Error Handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
   // eslint-disable-next-line no-param-reassign
