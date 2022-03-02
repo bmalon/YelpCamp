@@ -16,7 +16,7 @@ const descriptors = [
   'Sea',
   'Sky',
   'Dusty',
-  'Diamond'
+  'Diamond',
 ];
 
 const places = [
@@ -40,7 +40,7 @@ const places = [
   'Mule Camp',
   'Hunting Camp',
   'Cliffs',
-  'Hollow'
+  'Hollow',
 ];
 
 export {
