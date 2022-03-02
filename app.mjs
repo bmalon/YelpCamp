@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
 import CampgroundModel from './models/campground.mjs';
+import catchAsync from './utils/catchAsync.mjs';
 
 // const engine = require('ejs-mate');
 const filename = fileURLToPath(import.meta.url);
@@ -40,42 +41,42 @@ app.get('/', (req, res) => {
   res.render('home');
 });
 
-app.get('/campgrounds', async (req, res) => {
+app.get('/campgrounds', catchAsync(async (req, res) => {
   const campgrounds = await CampgroundModel.find({});
   res.render('campgrounds/index', { campgrounds });
-});
+}));
 
 app.get('/campgrounds/new', (req, res) => {
   res.render('campgrounds/new');
 });
 
-app.post('/campgrounds', async (req, res) => {
+app.post('/campgrounds', catchAsync(async (req, res) => {
   const campground = new CampgroundModel(req.body.campground);
   await campground.save();
   res.redirect(`/campgrounds/${campground._id}`);
-});
+}));
 
-app.get('/campgrounds/:id', async (req, res) => {
+app.get('/campgrounds/:id', catchAsync(async (req, res) => {
   const campground = await CampgroundModel.findById(req.params.id);
   res.render('campgrounds/show', { campground });
-});
+}));
 
-app.get('/campgrounds/:id/edit', async (req, res) => {
+app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
   const campground = await CampgroundModel.findById(req.params.id);
   res.render('campgrounds/edit', { campground });
-});
+}));
 
-app.put('/campgrounds/:id', async (req, res) => {
+app.put('/campgrounds/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
   const campground = await CampgroundModel.findByIdAndUpdate(id, { ...req.body.campground });
   res.redirect(`/campgrounds/${campground._id}`);
-});
+}));
 
-app.delete('/campgrounds/:id', async (req, res) => {
+app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
   await CampgroundModel.findByIdAndDelete(id);
   res.redirect('/campgrounds');
-});
+}));
 
 // app.get('/makecampground', async (req, res) => {
 //   const camp = new CampgroundModel({
@@ -85,6 +86,11 @@ app.delete('/campgrounds/:id', async (req, res) => {
 //   await camp.save();
 //   res.send(camp);
 // });
+
+// Error Handler
+app.use((err, req, res, next) => {
+  res.send('Something went WRONG');
+});
 
 app.listen(3000, () => {
   console.log('Serving on port 3000');
