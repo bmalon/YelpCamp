@@ -5,7 +5,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
-import CampgroundModel from './models/campground.mjs';
+import Campground from './models/campground.mjs';
 import CampgroundSchema from './schemas.mjs';
 import ExpressError from './utils/ExpressError.mjs';
 import catchAsync from './utils/catchAsync.mjs';
@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/campgrounds', catchAsync(async (req, res) => {
-  const campgrounds = await CampgroundModel.find({});
+  const campgrounds = await Campground.find({});
   res.render('campgrounds/index', { campgrounds });
 }));
 
@@ -63,45 +63,36 @@ app.get('/campgrounds/new', (req, res) => {
 });
 
 app.post('/campgrounds', validateCampground, catchAsync(async (req, res) => {
-  const campground = new CampgroundModel(req.body.campground);
+  const campground = new Campground(req.body.campground);
   await campground.save();
   res.redirect(`/campgrounds/${campground._id}`);
 }));
 
 app.get('/campgrounds/:id', catchAsync(async (req, res) => {
-  const campground = await CampgroundModel.findById(req.params.id);
+  const campground = await Campground.findById(req.params.id);
   res.render('campgrounds/show', { campground });
 }));
 
 app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
-  const campground = await CampgroundModel.findById(req.params.id);
+  const campground = await Campground.findById(req.params.id);
   res.render('campgrounds/edit', { campground });
 }));
 
 app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
   const { id } = req.params;
-  const campground = await CampgroundModel.findByIdAndUpdate(id, { ...req.body.campground });
+  const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
   res.redirect(`/campgrounds/${campground._id}`);
 }));
 
 app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
-  await CampgroundModel.findByIdAndDelete(id);
+  await Campground.findByIdAndDelete(id);
   res.redirect('/campgrounds');
 }));
 
 app.all('*', (req, res, next) => {
   next(new ExpressError(404, 'Page Not Found'));
 });
-
-// app.get('/makecampground', async (req, res) => {
-//   const camp = new CampgroundModel({
-//     title: 'My Camp',
-//     description: 'Amazing camping',
-//   });
-//   await camp.save();
-//   res.send(camp);
-// });
 
 // Error Handler
 // eslint-disable-next-line no-unused-vars

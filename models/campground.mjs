@@ -10,6 +10,6 @@ const CampgroundSchema = new Schema({
   location: String,
 });
 
-const CampgroundModel = mongoose.model('Campground', CampgroundSchema);
+const Campground = mongoose.model('Campground', CampgroundSchema);
 
-export default CampgroundModel;
+export default Campground;
