@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
 import Campground from './models/campground.mjs';
+import Review from './models/review.mjs';
 import CampgroundSchema from './schemas.mjs';
 import ExpressError from './utils/ExpressError.mjs';
 import catchAsync from './utils/catchAsync.mjs';
@@ -88,6 +89,15 @@ app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
   await Campground.findByIdAndDelete(id);
   res.redirect('/campgrounds');
+}));
+
+app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
+  const campground = await Campground.findById(req.params.id);
+  const review = new Review(req.body.review);
+  campground.reviews.push(review);
+  await review.save();
+  await campground.save();
+  res.redirect(`/campgrounds/${campground._id}`);
 }));
 
 app.all('*', (req, res, next) => {
