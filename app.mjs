@@ -7,7 +7,7 @@ import morgan from 'morgan';
 import methodOverride from 'method-override';
 import Campground from './models/campground.mjs';
 import Review from './models/review.mjs';
-import CampgroundSchema from './schemas.mjs';
+import { CampgroundSchema, ReviewSchema } from './schemas.mjs';
 import ExpressError from './utils/ExpressError.mjs';
 import catchAsync from './utils/catchAsync.mjs';
 
@@ -42,6 +42,16 @@ app.use(morgan('common'));
 
 const validateCampground = (req, res, next) => {
   const { error } = CampgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(', '); // create a single error message string
+    throw new ExpressError(400, msg);
+  } else {
+    next();
+  }
+};
+
+const validateReview = (req, res, next) => {
+  const { error } = ReviewSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(', '); // create a single error message string
     throw new ExpressError(400, msg);
@@ -91,7 +101,7 @@ app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
   res.redirect('/campgrounds');
 }));
 
-app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res) => {
   const campground = await Campground.findById(req.params.id);
   const review = new Review(req.body.review);
   campground.reviews.push(review);
