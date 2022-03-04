@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Review from './review.mjs';
 
 const { Schema } = mongoose;
 
@@ -14,6 +15,17 @@ const CampgroundSchema = new Schema({
       ref: 'Review',
     },
   ],
+});
+
+// Mongoose middleware
+CampgroundSchema.post('findOneAndDelete', async (doc) => {
+  if (doc) {
+    await Review.deleteMany({
+      _id: {
+        $in: doc.reviews,
+      },
+    });
+  }
 });
 
 const Campground = mongoose.model('Campground', CampgroundSchema);
