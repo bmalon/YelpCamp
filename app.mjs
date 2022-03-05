@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
 import session from 'express-session';
+import flash from 'connect-flash';
 import CampgroundRouter from './routes/campgrounds.mjs';
 import ReviewRouter from './routes/reviews.mjs';
 import ExpressError from './utils/ExpressError.mjs';
@@ -52,6 +53,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(morgan('common'));
 app.use(session(sessionConfig));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 app.use('/campgrounds', CampgroundRouter);
 app.use('/campgrounds/:id/reviews', ReviewRouter);
