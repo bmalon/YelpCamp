@@ -16,7 +16,8 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp', {
   // useNewUrlParser: true,
   // useCreateIndex: true,
   // useUnifiedTopology: true,
-  // NOTE: useNewUrlParser, useUnifiedTopology, and useCreateIndex are no longer supported options. Mongoose 6 always behaves as if they are true.
+  // useFindAndModify: false,
+  // NOTE: useNewUrlParser, useUnifiedTopology, useFindAndModify, and useCreateIndex are no longer supported options. Mongoose 6 always behaves as if they are true.
 });
 
 const db = mongoose.connection;
@@ -34,6 +35,7 @@ app.set('views', join(dirname(filename), 'views'));
 app.engine('ejs', ejsMate);
 
 // Middleware functions
+app.use(express.static(join(dirname(filename), 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(morgan('common'));
