@@ -5,6 +5,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
+import session from 'express-session';
 import CampgroundRouter from './routes/campgrounds.mjs';
 import ReviewRouter from './routes/reviews.mjs';
 import ExpressError from './utils/ExpressError.mjs';
@@ -34,11 +35,23 @@ app.set('views', join(dirname(filename), 'views'));
 
 app.engine('ejs', ejsMate);
 
+const sessionConfig = {
+  secret: 'badsecretvalue',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+
 // Middleware functions
 app.use(express.static(join(dirname(filename), 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(morgan('common'));
+app.use(session(sessionConfig));
 
 app.use('/campgrounds', CampgroundRouter);
 app.use('/campgrounds/:id/reviews', ReviewRouter);
