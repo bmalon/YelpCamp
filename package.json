@@ -29,6 +29,9 @@
     "mongoose": "^6.2.3",
     "morgan": "^1.10.0",
     "node-fetch": "^3.2.0",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.1.0",
     "unsplash-js": "^7.0.15",
     "vue": "^3.2.31"
   },
