@@ -10,6 +10,7 @@ import flash from 'connect-flash';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from './models/user.mjs';
+import UserRouter from './routes/users.mjs';
 import CampgroundRouter from './routes/campgrounds.mjs';
 import ReviewRouter from './routes/reviews.mjs';
 import ExpressError from './utils/ExpressError.mjs';
@@ -70,6 +71,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/', UserRouter);
 app.use('/campgrounds', CampgroundRouter);
 app.use('/campgrounds/:id/reviews', ReviewRouter);
 
