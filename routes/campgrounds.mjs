@@ -1,10 +1,10 @@
-import Router from 'express';
+import express from 'express';
 import Campground from '../models/campground.mjs';
 import { CampgroundSchema } from '../schemas.mjs';
 import ExpressError from '../utils/ExpressError.mjs';
 import catchAsync from '../utils/catchAsync.mjs';
 
-const CampgroundRouter = Router();
+const CampgroundRouter = express.Router();
 
 const validateCampground = (req, res, next) => {
   const { error } = CampgroundSchema.validate(req.body);
