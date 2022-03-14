@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport';
 import User from '../models/user.mjs';
 // import { UserSchema } from '../schemas.mjs';
 // import ExpressError from '../utils/ExpressError.mjs';
@@ -17,11 +18,19 @@ UserRouter.post('/register', catchAsync(async (req, res) => {
     const registeredUser = await User.register(user, password);
     req.flash('success', 'Welcome to YelpCamp!');
     res.redirect('/campgrounds');
-  }
-  catch (e) {
+  } catch (e) {
     req.flash('error', e.message);
     res.redirect('register');
   }
 }));
+
+UserRouter.get('/login', (req, res) => {
+  res.render('users/login');
+});
+
+UserRouter.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
+  req.flash('success', 'Welcome back!');
+  res.redirect('/campgrounds');
+});
 
 export default UserRouter;
