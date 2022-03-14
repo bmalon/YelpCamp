@@ -1,21 +1,10 @@
 import express from 'express';
 import Review from '../models/review.mjs';
 import Campground from '../models/campground.mjs';
-import { ReviewSchema } from '../schemas.mjs';
-import ExpressError from '../utils/ExpressError.mjs';
+import { validateReview } from '../middleware.mjs';
 import catchAsync from '../utils/catchAsync.mjs';
 
 const ReviewRouter = express.Router({ mergeParams: true });
-
-const validateReview = (req, res, next) => {
-  const { error } = ReviewSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(', '); // create a single error message string
-    throw new ExpressError(400, msg);
-  } else {
-    next();
-  }
-};
 
 ReviewRouter.post('/', validateReview, catchAsync(async (req, res) => {
   const campground = await Campground.findById(req.params.id);
