@@ -1,7 +1,7 @@
 import express from 'express';
 import Review from '../models/review.mjs';
 import Campground from '../models/campground.mjs';
-import { validateReview, isLoggedIn } from '../middleware.mjs';
+import { validateReview, isLoggedIn, isReviewAuthor } from '../middleware.mjs';
 import catchAsync from '../utils/catchAsync.mjs';
 
 const ReviewRouter = express.Router({ mergeParams: true });
@@ -17,7 +17,7 @@ ReviewRouter.post('/', isLoggedIn, validateReview, catchAsync(async (req, res) =
   res.redirect(`/campgrounds/${campground._id}`);
 }));
 
-ReviewRouter.delete('/:reviewId', catchAsync(async (req, res) => {
+ReviewRouter.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
   const { id, reviewId } = req.params;
   await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
   await Review.findByIdAndDelete(reviewId);

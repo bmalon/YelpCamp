@@ -23,7 +23,12 @@ CampgroundRouter.post('/', isLoggedIn, validateCampground, catchAsync(async (req
 }));
 
 CampgroundRouter.get('/:id', catchAsync(async (req, res) => {
-  const campground = await Campground.findById(req.params.id).populate('reviews').populate('author');
+  const campground = await Campground.findById(req.params.id).populate('author').populate({
+    path: 'reviews',
+    populate: {
+      path: 'author',
+    },
+  });
   console.log(campground);
   if (!campground) {
     req.flash('error', 'Campground does not exist!');

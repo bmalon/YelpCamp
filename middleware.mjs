@@ -1,4 +1,5 @@
 import Campground from './models/campground.mjs';
+import Review from './models/review.mjs';
 import { CampgroundSchema, ReviewSchema } from './schemas.mjs';
 import ExpressError from './utils/ExpressError.mjs';
 
@@ -42,9 +43,20 @@ const isAuthor = async (req, res, next) => {
   return next();
 };
 
+const isReviewAuthor = async (req, res, next) => {
+  const { id, reviewId } = req.params;
+  const review = await Review.findById(reviewId);
+  if (!review.author.equals(req.user._id)) {
+    req.flash('error', 'You do not have permission to do this');
+    return res.redirect(`/campgrounds/${id}`);
+  }
+  return next();
+};
+
 export {
   validateCampground,
   validateReview,
   isLoggedIn,
   isAuthor,
+  isReviewAuthor,
 };
