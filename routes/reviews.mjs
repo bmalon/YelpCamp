@@ -1,14 +1,15 @@
 import express from 'express';
 import Review from '../models/review.mjs';
 import Campground from '../models/campground.mjs';
-import { validateReview } from '../middleware.mjs';
+import { validateReview, isLoggedIn } from '../middleware.mjs';
 import catchAsync from '../utils/catchAsync.mjs';
 
 const ReviewRouter = express.Router({ mergeParams: true });
 
-ReviewRouter.post('/', validateReview, catchAsync(async (req, res) => {
+ReviewRouter.post('/', isLoggedIn, validateReview, catchAsync(async (req, res) => {
   const campground = await Campground.findById(req.params.id);
   const review = new Review(req.body.review);
+  review.author = req.user._id;
   campground.reviews.push(review);
   await review.save();
   await campground.save();
