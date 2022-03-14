@@ -33,4 +33,10 @@ UserRouter.post('/login', passport.authenticate('local', { failureFlash: true, f
   res.redirect('/campgrounds');
 });
 
+UserRouter.get('/logout', (req, res) => {
+  req.logout();
+  req.flash('success', 'Signed out successfully');
+  res.redirect('/campgrounds');
+});
+
 export default UserRouter;
