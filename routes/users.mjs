@@ -33,7 +33,9 @@ UserRouter.get('/login', (req, res) => {
 
 UserRouter.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
   req.flash('success', 'Welcome back!');
-  res.redirect('/campgrounds');
+  const redirectURL = req.session.returnTo || '/campgrounds';
+  delete req.session.returnTo; // clean up
+  res.redirect(redirectURL);
 });
 
 UserRouter.get('/logout', (req, res) => {
