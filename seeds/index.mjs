@@ -49,6 +49,7 @@ const seedDB = async (unsplashResponse) => {
     const randomThousand = Math.floor(Math.random() * 1000);
     const price = Math.floor(Math.random() * 20) + 10;
     camps.push(new CampgroundModel({
+      author: '622f0054061c1cbd7bc9aabb',
       location: `${cities[randomThousand].city}, ${cities[randomThousand].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
       image: `${unsplashResponse[i].urls.regular}`,
