@@ -1,6 +1,5 @@
 import express from 'express';
 import { validateCampground, isLoggedIn, isAuthor } from '../middleware.mjs';
-// import { campgroundsIndex, renderNewCampgroundForm } from '../controllers/campgrounds.mjs';
 import * as CampgroundsController from '../controllers/campgrounds.mjs';
 import catchAsync from '../utils/catchAsync.mjs';
 
