@@ -5,18 +5,17 @@ import catchAsync from '../utils/catchAsync.mjs';
 
 const CampgroundRouter = express.Router();
 
-CampgroundRouter.get('/', catchAsync(CampgroundsController.index));
+CampgroundRouter.route('/')
+  .get(catchAsync(CampgroundsController.index))
+  .post(isLoggedIn, validateCampground, catchAsync(CampgroundsController.createCampground));
 
 CampgroundRouter.get('/new', isLoggedIn, CampgroundsController.renderNewForm);
 
-CampgroundRouter.post('/', isLoggedIn, validateCampground, catchAsync(CampgroundsController.createCampground));
-
-CampgroundRouter.get('/:id', catchAsync(CampgroundsController.showCampground));
+CampgroundRouter.route('/:id')
+  .get(catchAsync(CampgroundsController.showCampground))
+  .put(isLoggedIn, isAuthor, validateCampground, catchAsync(CampgroundsController.updateCampground))
+  .delete(isLoggedIn, isAuthor, catchAsync(CampgroundsController.deleteCampground));
 
 CampgroundRouter.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(CampgroundsController.renderEditForm));
-
-CampgroundRouter.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(CampgroundsController.updateCampground));
-
-CampgroundRouter.delete('/:id', isLoggedIn, isAuthor, catchAsync(CampgroundsController.deleteCampground));
 
 export default CampgroundRouter;

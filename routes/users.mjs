@@ -5,13 +5,13 @@ import catchAsync from '../utils/catchAsync.mjs';
 
 const UserRouter = express.Router();
 
-UserRouter.get('/register', UsersController.renderRegisterForm);
+UserRouter.route('/register')
+  .get(UsersController.renderRegisterForm)
+  .post(catchAsync(UsersController.register));
 
-UserRouter.post('/register', catchAsync(UsersController.register));
-
-UserRouter.get('/login', UsersController.renderLoginForm);
-
-UserRouter.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), UsersController.login);
+UserRouter.route('/login')
+  .get(UsersController.renderLoginForm)
+  .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), UsersController.login);
 
 UserRouter.get('/logout', UsersController.logout);
 
