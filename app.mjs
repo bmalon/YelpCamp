@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 import ejsMate from 'ejs-mate';
@@ -14,6 +15,12 @@ import UserRouter from './routes/users.mjs';
 import CampgroundRouter from './routes/campgrounds.mjs';
 import ReviewRouter from './routes/reviews.mjs';
 import ExpressError from './utils/ExpressError.mjs';
+
+if (process.env.NODE_ENV !== 'production') {
+  console.log(process.env.CLOUDINARY_CLOUD_NAME);
+  console.log(process.env.CLOUDINARY_KEY);
+  console.log(process.env.CLOUDINARY_SECRET);
+}
 
 // const engine = require('ejs-mate');
 const filename = fileURLToPath(import.meta.url);
