@@ -21,8 +21,10 @@ const renderEditForm = async (req, res) => {
 
 const createCampground = async (req, res) => {
   const campground = new Campground(req.body.campground);
+  campground.images = req.files.map((f) => ({ path: f.path, filename: f.filename }));
   campground.author = req.user._id;
   await campground.save();
+  console.log(campground);
   req.flash('success', 'Successfully created a new campground!');
   res.redirect(`/campgrounds/${campground._id}`);
 };

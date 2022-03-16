@@ -10,11 +10,11 @@ const CampgroundRouter = express.Router();
 
 CampgroundRouter.route('/')
   .get(catchAsync(CampgroundsController.index))
-  // .post(isLoggedIn, validateCampground, catchAsync(CampgroundsController.createCampground));
-  .post(upload.array('image'), (req, res) => {
-    console.log(req.body, req.files);
-    res.send('YES');
-  });
+  .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(CampgroundsController.createCampground));
+//   .post(upload.array('image'), (req, res) => {
+//     console.log(req.body, req.files);
+//     res.send('YES');
+//   });
 
 CampgroundRouter.get('/new', isLoggedIn, CampgroundsController.renderNewForm);
 
