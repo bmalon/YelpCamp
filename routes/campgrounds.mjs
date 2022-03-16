@@ -1,10 +1,11 @@
 import express from 'express';
 import multer from 'multer';
+import { storage } from '../cloudinary/index.mjs';
 import { validateCampground, isLoggedIn, isAuthor } from '../middleware.mjs';
 import * as CampgroundsController from '../controllers/campgrounds.mjs';
 import catchAsync from '../utils/catchAsync.mjs';
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ storage });
 const CampgroundRouter = express.Router();
 
 CampgroundRouter.route('/')
